@@ -17,15 +17,19 @@
 
 package org.cosinus.launchertv;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
 import org.cosinus.launchertv.fragments.ApplicationFragment;
 
 public class Launcher extends FragmentActivity {
+
+	boolean started = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +41,22 @@ public class Launcher extends FragmentActivity {
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.container, ApplicationFragment.newInstance(), ApplicationFragment.TAG)
 				.commit();
+		new Thread(() -> {
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			Log.e("test","start");
+			Intent intent = getPackageManager().getLaunchIntentForPackage("com.mstar.tv.tvplayer.ui");
+			startActivity(intent);
+		}).start();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		setFullScreen();
+		//setFullScreen();
 	}
 
 	private void setFullScreen() {
